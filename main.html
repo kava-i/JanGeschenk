@@ -73,6 +73,7 @@ function bdyonload()
                         let st = document.getElementById("input").value;
                         let k = st.toLowerCase();
                         document.getElementById("input").value ="";
+			printString('\x04'+k+'\n');
                         socket.send(k);
                         let val = document.getElementById("output");
                         val.scrollTop = val.scrollHeight;
