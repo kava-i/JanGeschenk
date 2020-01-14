@@ -64,6 +64,7 @@ if(window.location.hostname!="")
         host = window.location.hostname;
 let socket = new WebSocket("ws://"+host+":9002");
 
+let gPipelinedOutput = null;
 function bdyonload()
 {
         document.getElementById("input").addEventListener("keypress",function(event){
@@ -78,6 +79,16 @@ function bdyonload()
                         val.scrollTop = val.scrollHeight;
                 }
         });
+	document.getElementById("input").addEventListener("keypress",function(event) {
+	    if(event.key=="Enter")
+	    {
+		if(gPipelinedOutput!=null)
+		{
+		    printString(gPipelinedOutput);
+		    gPipelinedOutput = null;
+		}
+	    }
+	});
         document.getElementById("input").focus();
         
         socket.onmessage = function(event){console.log("Received: "+event.data);printString(event.data);};
@@ -90,6 +101,7 @@ function isspanret(isspan,colname)
         else
                 return "<span class='"+colname+"'>";
 }
+
 function printString(theString)
 {
         let out = "";
@@ -108,10 +120,16 @@ function printString(theString)
                         out+=isspanret(isspanopen,"yellow");
                 else if(theString[i] == '\x05')
                         out+=isspanret(isspanopen,"blue");
+		else if(theString[i] == '$')
+		{
+			out+="<br class='line'>Press Enter to continue...<br class='line'>";
+			gPipelinedOutput = theString.substr(i+1);
+			break;
+		}
                 else{
                         out+=theString[i];
                 }
-                if(theString[i] >= '\x01' && theString[i] <= '\x03')
+                if(theString[i] >= '\x01' && theString[i] <= '\x05')
                         isspanopen = true;
 
         }
@@ -119,7 +137,9 @@ function printString(theString)
         {
                 out+="</span>";
         }
-        document.getElementById("output").innerHTML += out;
+	let outpt = document.getElementById("output");
+	outpt.innerHTML += out;
+	outpt.scrollTop = outpt.scrollHeight;
 }
 </script>
 </head>

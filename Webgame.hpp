@@ -5,6 +5,7 @@
 
 #include <iostream>
 #include <mutex>
+#include <signal.h>
 #include "Webconsole.hpp"
 
 typedef websocketpp::server<websocketpp::config::asio> server;
@@ -17,6 +18,14 @@ using websocketpp::lib::bind;
 typedef server::message_ptr message_ptr;
 void on_message(server* s, websocketpp::connection_hdl hdl, message_ptr msg);
 
+static inline void *gWebgameAddr = nullptr;
+
+template<typename T>
+void sig_handler(int)
+{
+    delete (T)gWebgameAddr;
+}
+
 template<typename GameType>
 class Webgame
 {
@@ -26,7 +35,14 @@ class Webgame
                 server echo_server;
 
                 Webgame()
-                {}
+                {
+		    signal(SIGTERM, sig_handler<Webgame<GameType>*>);
+		}
+
+		~Webgame()
+		{
+		    echo_server.stop();
+		}
 
                 void run()
                 {
