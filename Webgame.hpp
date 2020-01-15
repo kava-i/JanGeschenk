@@ -59,6 +59,7 @@ class Webgame
                                 echo_server.set_message_handler(bind(&Webgame<GameType>::on_message,this,&echo_server,::_1,::_2));
                                 echo_server.set_open_handler(bind(&Webgame<GameType>::on_open,this,::_1));
                                 echo_server.set_close_handler(bind(&Webgame<GameType>::on_open,this,::_1));
+				echo_server.set_reuse_addr(true);
 
                                 // Listen on port 9002
                                 echo_server.listen(9002);
