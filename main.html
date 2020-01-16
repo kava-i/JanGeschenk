@@ -22,15 +22,14 @@ body {
 
 .output {
         position: fixed;
-        left: 0;
+        left: 10%;
         top: 0;
 	margin-top: 0;
-	padding: 1.5rem;
-	padding-left: 10%;
-	padding-right: 10%;
-        height: calc(100% - 6rem);
-        overflow-y: scroll;
-	background-color: rgba(0,0,0,0.6);
+        height: calc(100% - 5%);
+	padding: 0.5rem;
+	padding-bottom: 0;
+        overflow-y: auto;
+	background-color: rgba(0,0,0,0.8);
         width: 80%;
 	font-size: small;
 }
@@ -97,7 +96,6 @@ function bdyonload()
                         socket.send(k);
                         let val = document.getElementById("output");
                         val.scrollTop = val.scrollHeight;
-			openFullscreen(document.documentElement);	
 		    }
                 }
         });
