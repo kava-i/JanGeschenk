@@ -1,12 +1,12 @@
 #pragma once
 #ifdef _COMPILE_FOR_SERVER_
 #warning "Compiling the source file for the online web server!"
-#include <websocketpp/config/asio.hpp>
+#include "websocketpp/config/asio.hpp"
 #else
-#include <websocketpp/config/asio_no_tls.hpp>
+#include "websocketpp/config/asio_no_tls.hpp"
 #endif
 
-#include <websocketpp/server.hpp>
+#include "websocketpp/server.hpp"
 
 #include <iostream>
 #include <mutex>
