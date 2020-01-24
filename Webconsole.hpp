@@ -1,12 +1,22 @@
 #pragma once
+#ifdef _COMPILE_FOR_SERVER_
+#warning "Compiling the source file for the online web server!"
+#include <websocketpp/config/asio.hpp>
+#else
 #include <websocketpp/config/asio_no_tls.hpp>
+#endif
 
 #include <websocketpp/server.hpp>
 
 #include <iostream>
 #include <mutex>
 
+
+#ifdef _COMPILE_FOR_SERVER_
+typedef websocketpp::server<websocketpp::config::asio_tls> server;
+#else
 typedef websocketpp::server<websocketpp::config::asio> server;
+#endif
 
 using websocketpp::lib::placeholders::_1;
 using websocketpp::lib::placeholders::_2;

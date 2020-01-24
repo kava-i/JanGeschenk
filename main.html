@@ -68,10 +68,16 @@ hr {
 </style>
 <script>
 let host = "127.0.0.1";
+let socket=null;
 if(window.location.hostname!="")
+{
         host = window.location.hostname;
-let socket = new WebSocket("ws://"+host+":9002");
-
+	socket = new WebSocket("wss://"+host+":9002");
+}
+else
+{
+	socket = new WebSocket("ws://"+host+":9002");
+}
 let gPipelinedOutput = null;
 let gPipelineNextEnter = false;
 function bdyonload()
