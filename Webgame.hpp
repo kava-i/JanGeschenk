@@ -136,7 +136,7 @@ class Webgame
 		std::lock_guard lk(ml);
 		try
 		{
-		    auto k = mp.at(hdl.lock().get());
+		    mp.at(hdl.lock().get());
 		    return;
 		}
 		catch(...)
