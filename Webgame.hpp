@@ -152,7 +152,7 @@ class Webgame
 		try
 		{
 		    auto k = mp.at(hdl.lock().get());
-		    k->onmessage(msg->get_payload());
+		    k->onmessage(msg->get_payload(),&mp);
 		}
 		catch(...)
 		{
