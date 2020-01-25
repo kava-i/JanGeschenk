@@ -94,8 +94,7 @@ class Webconsole
 
                 void flush()
                 {
-                        websocketpp::lib::error_code ec;
-                        s->send(_conn,_flushCont,websocketpp::frame::opcode::value::text,ec);
+                        s->send(_conn,_flushCont,websocketpp::frame::opcode::value::text);
                         _flushCont = "";
                 }
 };
