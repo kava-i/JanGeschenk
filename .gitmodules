@@ -1,0 +1,3 @@
+[submodule "Ciavelli"]
+	path = Ciavelli
+	url = git@github.com:ShadowItaly/Ciavelli.git
