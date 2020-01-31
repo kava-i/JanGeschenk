@@ -15,6 +15,7 @@ set(EXECUTABLE_OUTPUT_PATH ../bin)
 
 add_executable(basic_compile main.cpp)
 target_link_libraries(basic_compile PUBLIC pthread)
+target_link_libraries(basic_compile PUBLIC boost_system)
 add_git_cmake_project(NAME websocketpp USEDBY basic_compile
     URL "https://github.com/zaphoyd/websocketpp"
     BRANCH "develop")
