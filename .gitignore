@@ -1,1 +1,3 @@
 websocketpp/*
+build/*
+bin/*
