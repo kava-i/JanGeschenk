@@ -84,33 +84,24 @@ else
 	socket = new WebSocket("ws://"+host+":9002");
 }
 
-let clicked = false
+let clicked = false;
+let aud = new Audio("sounds/piano.mp3");
 function playMusik() 
 {
     if(clicked == false) {
-        document.getElementById("audiofile").play();
+        aud.play();
         document.getElementById("symbol").className = "fa fa-volume-up";
         clicked = true;
     }
 
     else
     {
-        document.getElementById("audiofile").pause();
+        aud.pause();
         document.getElementById("symbol").className = "fa fa-volume-off";
         clicked = false;
     }
 }
-function callFightMusik(x)
-{
-    if(x.search("Fighting against eachother:") != -1) {
-        document.getElementById("fightAudio").play();
-        document.getElementById("audiofile").pause();
-    }
-    else if(x.search("Fight ended.") != -1) {
-        document.getElementById("fightAudio").pause();
-        document.getElementById("audiofile").play();
-    } 
-}
+
 
 let gPipelinedOutput = null;
 let gPipelineNextEnter = false;
@@ -162,7 +153,7 @@ function bdyonload()
         });
         document.getElementById("input").focus();
         
-        socket.onmessage = function(event){console.log("Received: "+event.data);callFightMusik(event.data);printString(event.data);};
+        socket.onmessage = function(event){console.log("Received: "+event.data);printString(event.data);};
 }
 
 function isspanret(isspan,colname)
@@ -171,6 +162,22 @@ function isspanret(isspan,colname)
                 return "</span><span class='"+colname+"'>";
         else
                 return "<span class='"+colname+"'>";
+}
+
+function parse_file(strin,x)
+{
+    name = '';
+    for(let i = x+1; i < strin.length; i++)
+	if(strin[i] == '\x07')
+	{
+	    console.log("Playing soundfile: "+name);
+	    aud.pause();
+	    aud = new Audio(name);
+	    if(clicked) aud.play();
+	    return i+1;
+	}
+	else
+	    name+=strin[i]
 }
 
 function printString(theString)
@@ -193,6 +200,8 @@ function printString(theString)
                         out+=isspanret(isspanopen,"blue");
 		else if(theString[i] == '\x06')
 			out+=isspanret(isspanopen,"orange");
+		else if(theString[i] == '\x07')
+			i=parse_file(theString,i);
 		else if(theString[i] == '$')
 		{
 			out+="<br class='line'>Press Enter to continue...<br class='line'>";
@@ -203,9 +212,8 @@ function printString(theString)
                 else{
                         out+=theString[i];
                 }
-                if(theString[i] >= '\x01' && theString[i] <= '\x05')
+                if(theString[i] >= '\x01' && theString[i] <= '\x06')
                         isspanopen = true;
-
         }
         if(isspanopen)
         {
@@ -256,17 +264,6 @@ function closeFullscreen(elem) {
 }
 </script>
 </head>
-
-<audio id="audiofile" preload="auto">
-<source src="sounds/piano.mp3" />
-<source src="sounds/piano.ogg" />
-<source src="sounds/piano.wav" />
-</audio>
-<audio id="fightAudio" preload="auto">
-<source src="sounds/fight.mp3" />
-<source src="sounds/fight.ogg" />
-<source src="sounds/fight.wav" />
-</audio>
 
 <body onload="bdyonload();return true;">
         <button onclick="playMusik();return true;"><i id="symbol" class= "fa fa-volume-off" style="font-size:18px"></i></button>
