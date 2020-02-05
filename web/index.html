@@ -15,10 +15,11 @@ body {
 .input,.input:focus {
         position: fixed;
         left: 0;
-        color: yellow;
+        color: green;
         top: calc(100% - 2.5rem);
+	height: 3rem;
         overflow: hidden;
-	    background: black;
+	background: black;
 }
 
 .output {
@@ -26,7 +27,7 @@ body {
         left: 10%;
         top: 0;
 	margin-top: 0;
-        height: calc(100% - 7%);
+        height: calc(100% - 3rem);
 	padding: 0.5rem;
 	padding-bottom: 0;
         overflow-y: auto;
@@ -37,7 +38,7 @@ body {
 
 hr {
         width: 100vw;
-        color: red;
+        color: #ba68c8;
 }
 
 .red {
@@ -59,9 +60,12 @@ hr {
 .blue {
         color: blue;
 }
+.orange {
+    color: #ff9800;
+}
 #input {
         border: None;
-        color: yellow;
+        color: #ff9800;
         background: black;
         width: 80vw;
 }
@@ -131,7 +135,7 @@ function bdyonload()
                         let st = document.getElementById("input").value;
                         let k = st.toLowerCase();
                         document.getElementById("input").value ="";
-			printString('\x04'+k+'\n');
+			printString('\x06'+k+'\n');
 			listOfCommands.push(k);
                         socket.send(k);
                         let val = document.getElementById("output");
@@ -187,6 +191,8 @@ function printString(theString)
                         out+=isspanret(isspanopen,"yellow");
                 else if(theString[i] == '\x05')
                         out+=isspanret(isspanopen,"blue");
+		else if(theString[i] == '\x06')
+			out+=isspanret(isspanopen,"orange");
 		else if(theString[i] == '$')
 		{
 			out+="<br class='line'>Press Enter to continue...<br class='line'>";
@@ -267,6 +273,6 @@ function closeFullscreen(elem) {
         <p id="output" class="output"></p>
         <div class="input">
                 <hr>
-                <span>$> <input type="text" id="input" style="display:inline-block" /></span>
+                <span>$> <input type="text" id="input" style="display:inline-block" placeholder='type command here...'/></span>
         </div>
 </body>
