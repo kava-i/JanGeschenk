@@ -175,42 +175,42 @@ function isspanret(isspan,colname)
 
 function printString(theString)
 {
-        let out = "";
-        let isspanopen = false;
-        for(let i = 0; i < theString.length; i++)
+    let out = "";
+    let isspanopen = false;
+    for(let i = 0; i < theString.length; i++)
+    {
+        if(theString[i] == '\n')
+            ut+="<br class='line'>";
+        else if(theString[i] == '\x01')
+            out+=isspanret(isspanopen,"white");
+        else if(theString[i] == '\x02')
+            out+=isspanret(isspanopen,"red");
+        else if(theString[i] == '\x03')
+            out+=isspanret(isspanopen,"green");
+        else if(theString[i] == '\x04')
+            out+=isspanret(isspanopen,"yellow");
+        else if(theString[i] == '\x05')
+            out+=isspanret(isspanopen,"blue");
+        else if(theString[i] == '\x06')
+            out+=isspanret(isspanopen,"orange");
+        else if(theString[i] == '$')
         {
-                if(theString[i] == '\n')
-                        out+="<br class='line'>";
-                else if(theString[i] == '\x01')
-                        out+=isspanret(isspanopen,"white");
-                else if(theString[i] == '\x02')
-                        out+=isspanret(isspanopen,"red");
-                else if(theString[i] == '\x03')
-                        out+=isspanret(isspanopen,"green");
-                else if(theString[i] == '\x04')
-                        out+=isspanret(isspanopen,"yellow");
-                else if(theString[i] == '\x05')
-                        out+=isspanret(isspanopen,"blue");
-		else if(theString[i] == '\x06')
-			out+=isspanret(isspanopen,"orange");
-		else if(theString[i] == '$')
-		{
-			out+="<br class='line'>Press Enter to continue...<br class='line'>";
-			gPipelinedOutput = theString.substr(i+1);
-			gPipelineNextEnter = true;
-			break;
-		}
-                else{
-                        out+=theString[i];
-                }
-                if(theString[i] >= '\x01' && theString[i] <= '\x05')
-                        isspanopen = true;
+            out+="<br class='line'>TECH GUY: Press Enter to continue...<br class='line'>";
+            gPipelinedOutput = theString.substr(i+1);
+            gPipelineNextEnter = true;
+            break;
+        }
+        else{
+                out+=theString[i];
+        }
+        if(theString[i] >= '\x01' && theString[i] <= '\x05')
+                isspanopen = true;
 
-        }
-        if(isspanopen)
-        {
-                out+="</span>";
-        }
+    }
+    if(isspanopen)
+    {
+        out+="</span>";
+    }
 	let outpt = document.getElementById("output");
 	outpt.innerHTML += out;
 	outpt.scrollTop = outpt.scrollHeight;
