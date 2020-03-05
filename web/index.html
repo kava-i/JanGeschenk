@@ -31,7 +31,7 @@ body {
 	padding: 0.5rem;
 	padding-bottom: 0;
         overflow-y: auto;
-	background-color: rgba(0,0,0,0.8);
+	background-color: rgba(0,0,0,0.95);
         width: 80%;
 	font-size: small;
 }
@@ -187,7 +187,7 @@ function printString(theString)
     for(let i = 0; i < theString.length; i++)
     {
         if(theString[i] == '\n')
-            ut+="<br class='line'>";
+            out+="<br class='line'>";
         else if(theString[i] == '\x01')
             out+=isspanret(isspanopen,"white");
         else if(theString[i] == '\x02')
