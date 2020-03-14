@@ -34,6 +34,7 @@ body {
 	background-color: rgba(0,0,0,0.8);
         width: 80%;
 	font-size: small;
+        color: #d7dbdd;
 }
 
 hr {
@@ -42,15 +43,18 @@ hr {
 }
 
 .red {
-        color: red;
+        color:  #e74c3c;
 }
 
 .white {
-        color: white;
+        color: #d7dbdd;
 }
 
+.dark {
+    color: #839192;
+}
 .green {
-        color: green;
+        color: #1e8449;
 }
 
 .yellow {
@@ -58,8 +62,9 @@ hr {
 }
 
 .blue {
-        color: blue;
+    color: #2e86c1;
 }
+
 .orange {
     color: #ff9800;
 }
@@ -198,13 +203,15 @@ function printString(theString)
                         out+=isspanret(isspanopen,"yellow");
                 else if(theString[i] == '\x05')
                         out+=isspanret(isspanopen,"blue");
+                else if(theString[i] == '\x08')
+                        out+=isspanret(isspanopen, "dark");
 		else if(theString[i] == '\x06')
 			out+=isspanret(isspanopen,"orange");
 		else if(theString[i] == '\x07')
 			i=parse_file(theString,i);
 		else if(theString[i] == '$')
 		{
-			out+="<br class='line'>Press Enter to continue...<br class='line'>";
+			out+="<br class='line'>TECH GUY - Press Enter to continue...<br class='line'>";
 			gPipelinedOutput = theString.substr(i+1);
 			gPipelineNextEnter = true;
 			break;
