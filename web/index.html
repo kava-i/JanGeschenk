@@ -122,6 +122,7 @@ function bdyonload()
 			gPipelineNextEnter = false;
 			if(gPipelinedOutput!=null)
 			{
+                output.innerHTML = output.innerHTML.substr(0, output.innerHTML.lastIndexOf("TECH"));
 			    printString(gPipelinedOutput);
 			}
 		    }
@@ -211,7 +212,8 @@ function printString(theString)
         else if(theString[i] == '$')
         {
             out+="<br class='line'>TECH GUY - Press Enter to continue...<br class='line'>";
-            gPipelinedOutput = theString.substr(i+1);
+            gPipelinedOutput = theString.substr(i+2);
+            console.log(gPipelinedOutput);
             gPipelineNextEnter = true;
             break;
         }
