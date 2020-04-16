@@ -26,16 +26,22 @@ body {
         position: fixed;
         left: 10%;
         top: 0;
-	margin-top: 0;
+	    margin-top: 0;
         height: calc(100% - 3rem);
-	padding: 0.5rem;
-	padding-bottom: 0;
+	    padding: 0.5rem;
+	    padding-bottom: 0;
         overflow-y: auto;
-	background-color: rgba(0,0,0,0.95);
+	    background-color: rgba(0,0,0,0.95);
         width: 80%;
-	font-size: small;
-        color: #d7dbdd;
+	    font-size: small;
+        color: #f8f9f9;
 }
+
+.spoken {
+    padding-left: 1.5em;
+    text-indent:-1.5em;
+}
+
 hr {
         width: 100vw;
         color: #ba68c8;
@@ -46,7 +52,13 @@ hr {
 }
 
 .white {
-        color: #d7dbdd;
+        color:  #f8f9f9;
+        /*color: #e5e7e9; 
+        color: #d7dbdd; */
+}
+
+.whitedark {
+    color: #bdc3c7;
 }
 
 .dark {
@@ -122,7 +134,7 @@ function bdyonload()
 			gPipelineNextEnter = false;
 			if(gPipelinedOutput!=null)
 			{
-                output.innerHTML = output.innerHTML.substr(0, output.innerHTML.lastIndexOf("TECH"));
+                output.innerHTML = output.innerHTML.substr(0, output.innerHTML.lastIndexOf("Press Enter to continue"));
 			    printString(gPipelinedOutput);
 			}
 		    }
@@ -207,11 +219,13 @@ function printString(theString)
                 out+=isspanret(isspanopen, "dark");
         else if(theString[i] == '\x06')
             out+=isspanret(isspanopen,"orange");
+        else if(theString[i] == '\x09')
+                out+=isspanret(isspanopen, "whitedark");
         else if(theString[i] == '\x07')
             i=parse_file(theString,i);
         else if(theString[i] == '$')
         {
-            out+="<br class='line'>TECH GUY - Press Enter to continue...<br class='line'>";
+            out+="<br class='line'><span style='color:#f8f9f9'>Press Enter to continue...<span><br class='line'>";
             gPipelinedOutput = theString.substr(i+2);
             console.log(gPipelinedOutput);
             gPipelineNextEnter = true;
