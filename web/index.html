@@ -140,6 +140,7 @@ function bdyonload()
                 if(gPipelinedOutput!=null)
                 {
                     output.innerHTML = output.innerHTML.substr(0, output.innerHTML.lastIndexOf("Press Enter to continue"));
+                    console.log(gPipelinedOutput);
                     printString(gPipelinedOutput);
                 }
             }
