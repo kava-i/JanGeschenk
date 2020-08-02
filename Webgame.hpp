@@ -110,7 +110,6 @@ class Webgame
 	    } catch (...) {
 		std::cout << "other exception" << std::endl;
 	    }
-
 	}
 
 	void on_close(websocketpp::connection_hdl hdl)
