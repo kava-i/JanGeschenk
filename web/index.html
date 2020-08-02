@@ -75,6 +75,9 @@ hr {
     color: #ba68c8;
 }
 
+.black{
+    color: black;
+}
 .red {
     color:  #e74c3c;
 }
@@ -237,6 +240,8 @@ function printString(theString)
     {
         if(theString[i] == '\n')
             out+="<br class='line'>";
+        else if(theString[i] == '\x00')
+            out+=isspanret(isspanopen,"black");
         else if(theString[i] == '\x01')
             out+=isspanret(isspanopen,"white");
         else if(theString[i] == '\x02')
