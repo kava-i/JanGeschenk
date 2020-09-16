@@ -177,8 +177,8 @@ function bdyonload()
                 document.getElementById("input").value ="";
                 if(k=="")
                     printString('\x06'+". . ."+'\n');
-                else
-                    printString('\x06'+k+'\n');
+                //else
+                //    printString('\x06'+k+'\n');
                 listOfCommands.push(k);
                 socket.send(k);
                 let val = document.getElementById("output");
