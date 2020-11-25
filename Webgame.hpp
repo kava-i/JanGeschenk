@@ -36,9 +36,13 @@ class Webgame
     std::mutex ml;
     std::map<decltype(websocketpp::lib::weak_ptr<void>().lock().get()),GameType*> mp;
     server echo_server;
+    bool global_shutdown;
+    bool wait;
 
     Webgame() {
       signal(SIGTERM, sig_handler<Webgame<GameType>*>);
+      global_shutdown=false;
+      wait=true;
     }
 
     ~Webgame() {
@@ -144,7 +148,12 @@ class Webgame
         std::lock_guard lk(ml);
         try {
           auto k = mp.at(hdl.lock().get());
-          k->onmessage(msg->get_payload(),&mp);
+          k->onmessage(msg->get_payload(),&mp, global_shutdown);
+          std::cout << "AHHHHH THATS WHY!!" << std::endl;
+          if (global_shutdown == true && wait == true)
+            wait = false;
+          else if (global_shutdown == true && wait == false)
+            echo_server.stop();
         }
         catch(...) {
           return;

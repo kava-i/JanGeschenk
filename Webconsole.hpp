@@ -83,7 +83,9 @@ class Webconsole
     }
 
     void flush() {
-      s->send(_conn,_flushCont,websocketpp::frame::opcode::value::text);
+      std::cout << "Printing: " << _flushCont << std::endl;
+      s->send(_conn, _flushCont, websocketpp::frame::opcode::value::text);
+      std::cout << "Done." << std::endl;
       _flushCont = "";
     }
 };
