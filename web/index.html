@@ -122,7 +122,7 @@ let host = "127.0.0.1";
 let socket=null;
 if(window.location.hostname!="")
 {
-        host = window.location.hostname;
+  host = window.location.hostname;
 	socket = new WebSocket("wss://"+host+":9002");
 }
 else

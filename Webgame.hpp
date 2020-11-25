@@ -82,7 +82,7 @@ class Webgame
 	  }
     #endif
 
-	  void run() {
+	  void run(int port) {
 	    try {
         // Set logging settings
         echo_server.set_access_channels(websocketpp::log::alevel::all);
@@ -93,21 +93,22 @@ class Webgame
 
         // Register our message handler
         echo_server.set_message_handler(bind(&Webgame<GameType>::on_message,this,&echo_server,::_1,::_2));
-#ifdef _COMPILE_FOR_SERVER_
-        echo_server.set_tls_init_handler(bind(&Webgame<GameType>::on_tls_init,this,::_1));
-#endif
+        #ifdef _COMPILE_FOR_SERVER_
+          echo_server.set_tls_init_handler(bind(&Webgame<GameType>::on_tls_init,this,::_1));
+        #endif
         echo_server.set_open_handler(bind(&Webgame<GameType>::on_open,this,::_1));
         echo_server.set_close_handler(bind(&Webgame<GameType>::on_close,this,::_1));
         echo_server.set_reuse_addr(true);
 
         // Listen on port 9002
-        echo_server.listen(9002);
+        echo_server.listen(port);
 
         // Start the server accept loop
         echo_server.start_accept();
 
         // Start the ASIO io_service run loop
         echo_server.run();
+        std::cout << "Webgame started on port " << port << std::endl;
       } 
       catch (websocketpp::exception const & e) {
         std::cout << e.what() << std::endl;
