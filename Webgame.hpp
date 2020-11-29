@@ -82,6 +82,10 @@ class Webgame
 	  }
     #endif
 
+    void stop() {
+      echo_server.stop();
+    }
+
 	  void run(int port) {
 	    try {
         // Set logging settings
@@ -150,7 +154,6 @@ class Webgame
         try {
           auto k = mp.at(hdl.lock().get());
           k->onmessage(msg->get_payload(),&mp, global_shutdown);
-          std::cout << "AHHHHH THATS WHY!!" << std::endl;
           if (global_shutdown == true && wait == true)
             wait = false;
           else if (global_shutdown == true && wait == false)
