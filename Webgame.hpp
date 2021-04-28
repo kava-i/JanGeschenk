@@ -59,9 +59,10 @@ class Webgame
 			    asio::ssl::context::no_sslv3 |
 			    asio::ssl::context::no_tlsv1 |
 			    asio::ssl::context::single_dh_use);
+        std::cout << "About to use key at: /etc/letsencrypt/live/kava-i.de/fullchain.pem" << std::endl;
 		    ctx->set_password_callback(bind(&get_password));
-        ctx->use_certificate_chain_file("/etc/letsencrypt/live/fkaf.eu/fullchain.pem");
-        ctx->use_private_key_file("/etc/letsencrypt/live/fkaf.eu/privkey.pem", 
+        ctx->use_certificate_chain_file("/etc/letsencrypt/live/kava-i.de/fullchain.pem");
+        ctx->use_private_key_file("/etc/letsencrypt/live/kava-i.de/privkey.pem", 
             asio::ssl::context::pem);
         ctx->use_tmp_dh_file("/etc/letsencrypt/ssl-dhparams.pem");
         // Example method of generating this file:
