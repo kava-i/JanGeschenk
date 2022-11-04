@@ -1,6 +1,7 @@
 #pragma once
 
 #include <iostream>
+#include <memory>
 #include <mutex>
 #include <signal.h>
 #include "Webconsole.hpp"
@@ -29,20 +30,22 @@ inline std::string get_password() {
   return "password";
 }
 
-template<typename GameType>
+template<typename GameType, typename Game>
 class Webgame
 {
   public:
-    std::mutex ml;
-    std::map<decltype(websocketpp::lib::weak_ptr<void>().lock().get()),GameType*> mp;
+    std::mutex ml_;
+    std::map<decltype(websocketpp::lib::weak_ptr<void>().lock().get()),GameType*> user_connections_;
     server echo_server;
     bool global_shutdown;
     bool wait;
+    std::shared_ptr<Game> game_;
 
-    Webgame() {
-      signal(SIGTERM, sig_handler<Webgame<GameType>*>);
+    Webgame(std::shared_ptr<Game> game) {
+      signal(SIGTERM, sig_handler<Webgame<GameType, Game>*>);
       global_shutdown=false;
       wait=true;
+      game_ = game;
     }
 
     ~Webgame() {
@@ -97,12 +100,12 @@ class Webgame
         echo_server.init_asio();
 
         // Register our message handler
-        echo_server.set_message_handler(bind(&Webgame<GameType>::on_message,this,&echo_server,::_1,::_2));
+        echo_server.set_message_handler(bind(&Webgame<GameType, Game>::on_message,this,&echo_server,::_1,::_2));
         #ifdef _COMPILE_FOR_SERVER_
           echo_server.set_tls_init_handler(bind(&Webgame<GameType>::on_tls_init,this,::_1));
         #endif
-        echo_server.set_open_handler(bind(&Webgame<GameType>::on_open,this,::_1));
-        echo_server.set_close_handler(bind(&Webgame<GameType>::on_close,this,::_1));
+        echo_server.set_open_handler(bind(&Webgame<GameType, Game>::on_open,this,::_1));
+        echo_server.set_close_handler(bind(&Webgame<GameType, Game>::on_close,this,::_1));
         echo_server.set_reuse_addr(true);
 
         // Listen on port 9002
@@ -124,45 +127,41 @@ class Webgame
 	  }
 
     void on_close(websocketpp::connection_hdl hdl) {
-      std::lock_guard lk(ml);
+      std::lock_guard lk(ml_);
       try {
-        auto k = mp.at(hdl.lock().get());
+        auto k = user_connections_.at(hdl.lock().get());
         delete k;
-        if(mp.size()>1)
-          mp.erase(hdl.lock().get());
+        if(user_connections_.size()>1)
+          user_connections_.erase(hdl.lock().get());
         else
-          mp.clear();
+          user_connections_.clear();
       }
       catch(...) {}
     }
 
     void on_open(websocketpp::connection_hdl hdl) {
-      {
-        std::lock_guard lk(ml);
-        try {
-          mp.at(hdl.lock().get());
-          return;
-        }
-        catch(...) {
-          mp[hdl.lock().get()] = new GameType(new Webconsole(&echo_server,hdl));
-        }
+      std::lock_guard lk(ml_);
+      try {
+        user_connections_.at(hdl.lock().get());
+        return;
+      }
+      catch(...) {
+        user_connections_[hdl.lock().get()] = new GameType(new Webconsole(&echo_server,hdl), game_);
       }
     }
 
     void on_message(server* s, websocketpp::connection_hdl hdl, message_ptr msg) {
-      {
-        std::lock_guard lk(ml);
-        try {
-          auto k = mp.at(hdl.lock().get());
-          k->onmessage(msg->get_payload(),&mp, global_shutdown);
-          if (global_shutdown == true && wait == true)
-            wait = false;
-          else if (global_shutdown == true && wait == false)
-            echo_server.stop();
-        }
-        catch(...) {
-          return;
-        }
+      std::lock_guard lk(ml_);
+      try {
+        auto game = user_connections_.at(hdl.lock().get());
+        game->onmessage(msg->get_payload(),&user_connections_, global_shutdown);
+        if (global_shutdown == true && wait == true)
+          wait = false;
+        else if (global_shutdown == true && wait == false)
+          echo_server.stop();
+      }
+      catch(...) {
+        return;
       }
     }
 };

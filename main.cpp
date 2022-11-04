@@ -1,18 +1,25 @@
 #include "Webgame.hpp"
+#include <future>
+#include <memory>
 
-class game
+class Game {
+  public:
+    Game() {}
+};
+
+class GameHandler
 {
   public:
-	  game(Webconsole *ct) {}
+	  GameHandler(Webconsole *ct, std::shared_ptr<Game> game) {}
 	  void onmessage(std::string sInput,std::map<
         decltype(websocketpp::lib::weak_ptr<void>().lock().get()),
-        game*> *ptr, bool& global_shutdown) {
+        GameHandler*> *ptr, bool& global_shutdown) {
 	  }
 };
 
 int main()
 {
-    Webgame<game> gl;
-    gl.run(9001);
-    return 0;
+  Webgame<GameHandler, Game> gl(std::make_shared<Game>());
+  gl.run(9001);
+  return 0;
 }
