@@ -19,7 +19,7 @@ class GameHandler
 
 int main()
 {
-  Webgame<GameHandler, Game> gl(std::make_shared<Game>());
-  gl.run(9001);
+  Webgame<GameHandler, Game> gl(std::make_shared<Game>(), 9001);
+  gl.run();
   return 0;
 }

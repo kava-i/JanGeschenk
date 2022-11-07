@@ -40,12 +40,14 @@ class Webgame
     bool global_shutdown;
     bool wait;
     std::shared_ptr<Game> game_;
+    int port_;
 
-    Webgame(std::shared_ptr<Game> game) {
+    Webgame(std::shared_ptr<Game> game, int port) {
       signal(SIGTERM, sig_handler<Webgame<GameType, Game>*>);
       global_shutdown=false;
       wait=true;
       game_ = game;
+      port_ = port;
     }
 
     ~Webgame() {
@@ -90,7 +92,7 @@ class Webgame
       echo_server.stop();
     }
 
-	  void run(int port) {
+	  void run() {
 	    try {
         // Set logging settings
         echo_server.set_access_channels(websocketpp::log::alevel::all);
@@ -109,14 +111,14 @@ class Webgame
         echo_server.set_reuse_addr(true);
 
         // Listen on port 9002
-        echo_server.listen(port);
+        echo_server.listen(port_);
 
         // Start the server accept loop
         echo_server.start_accept();
 
         // Start the ASIO io_service run loop
         echo_server.run();
-        std::cout << "Webgame started on port " << port << std::endl;
+        std::cout << "Webgame started on port " << port_ << std::endl;
       } 
       catch (websocketpp::exception const & e) {
         std::cout << e.what() << std::endl;
