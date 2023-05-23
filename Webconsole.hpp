@@ -1,5 +1,5 @@
 #pragma once
-#ifdef _COMPILE_FOR_SERVER_
+#ifdef _WSS_
 #include <websocketpp/config/asio.hpp>
 #else
 #include <websocketpp/config/asio_no_tls.hpp>
@@ -11,7 +11,7 @@
 #include <mutex>
 
 
-#ifdef _COMPILE_FOR_SERVER_
+#ifdef _WSS_
 typedef websocketpp::server<websocketpp::config::asio_tls> server;
 #else
 typedef websocketpp::server<websocketpp::config::asio> server;
